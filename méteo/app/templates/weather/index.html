@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>What's the weather like?</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css"
+    />
+    <style>
+      .hero.is-primary {
+        background-color: gray;
+      }
+
+      .hero.is-success {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <section
+      class="hero {% if forecast and forecast.0.condition == 'Sunny' %}is-success{% else %}is-primary{% endif %}"
+    >
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">What's the weather like?</h1>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-offset-4 is-4">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  <input
+                    class="input"
+                    type="text"
+                    placeholder="City Name"
+                    name="city"
+                  />
+                </div>
+                <div class="control">
+                  <button class="button is-info">Get the weather</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-offset-4 is-4">
+            <div class="box">
+              {% for forecast_day in forecast %}
+              <article class="media">
+                <div class="media-left">
+                  <figure class="image is-50x50">
+                    <img src="{{ forecast_day.icon }}" alt="Image" />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      <span class="title">{{ city }}</span>
+                      <br />
+                      <span class="title">{{ forecast_day.date }}</span>
+                      <br />
+                      <span class="subtitle"
+                        >Max Temperature: {{ forecast_day.max_temp }}° C</span
+                      >
+                      <br />
+                      <span class="subtitle"
+                        >Min Temperature: {{ forecast_day.min_temp }}° C</span
+                      >
+                      <br />
+                      {{ forecast_day.condition }}
+                    </p>
+                    <p>
+                      {% if forecast_day.condition == 'Sunny' %}
+                      <strong>Activities:</strong> Go for a walk, have a picnic.
+                      {% elif forecast_day.condition == 'Rain' %}
+                      <strong>Activities:</strong> Stay indoors, watch a movie.
+                      {% elif forecast_day.condition == 'Snow' %}
+                      <strong>Activities:</strong> Build a snowman, go skiing.
+                      {% else %} <strong>Activities:</strong> Check out local
+                      attractions. {% endif %}
+                    </p>
+                  </div>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footer"></footer>
+  </body>
+</html>
