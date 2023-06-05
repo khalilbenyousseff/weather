@@ -1,5 +1,3 @@
-# Groupe de benyou_k 1006689
-
 # Weather App
 
 This is a simple weather app that provides the current weather and a 3-day forecast for a given city.
